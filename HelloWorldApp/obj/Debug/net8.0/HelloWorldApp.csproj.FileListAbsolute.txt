@@ -1,0 +1,14 @@
+/Users/sergeygershov/Desktop/SynologyDrive/Infinity/azure_devops_pipeline/HelloWorldApp/bin/Debug/net8.0/HelloWorldApp
+/Users/sergeygershov/Desktop/SynologyDrive/Infinity/azure_devops_pipeline/HelloWorldApp/bin/Debug/net8.0/HelloWorldApp.deps.json
+/Users/sergeygershov/Desktop/SynologyDrive/Infinity/azure_devops_pipeline/HelloWorldApp/bin/Debug/net8.0/HelloWorldApp.runtimeconfig.json
+/Users/sergeygershov/Desktop/SynologyDrive/Infinity/azure_devops_pipeline/HelloWorldApp/bin/Debug/net8.0/HelloWorldApp.dll
+/Users/sergeygershov/Desktop/SynologyDrive/Infinity/azure_devops_pipeline/HelloWorldApp/bin/Debug/net8.0/HelloWorldApp.pdb
+/Users/sergeygershov/Desktop/SynologyDrive/Infinity/azure_devops_pipeline/HelloWorldApp/obj/Debug/net8.0/HelloWorldApp.GeneratedMSBuildEditorConfig.editorconfig
+/Users/sergeygershov/Desktop/SynologyDrive/Infinity/azure_devops_pipeline/HelloWorldApp/obj/Debug/net8.0/HelloWorldApp.AssemblyInfoInputs.cache
+/Users/sergeygershov/Desktop/SynologyDrive/Infinity/azure_devops_pipeline/HelloWorldApp/obj/Debug/net8.0/HelloWorldApp.AssemblyInfo.cs
+/Users/sergeygershov/Desktop/SynologyDrive/Infinity/azure_devops_pipeline/HelloWorldApp/obj/Debug/net8.0/HelloWorldApp.csproj.CoreCompileInputs.cache
+/Users/sergeygershov/Desktop/SynologyDrive/Infinity/azure_devops_pipeline/HelloWorldApp/obj/Debug/net8.0/HelloWorldApp.dll
+/Users/sergeygershov/Desktop/SynologyDrive/Infinity/azure_devops_pipeline/HelloWorldApp/obj/Debug/net8.0/refint/HelloWorldApp.dll
+/Users/sergeygershov/Desktop/SynologyDrive/Infinity/azure_devops_pipeline/HelloWorldApp/obj/Debug/net8.0/HelloWorldApp.pdb
+/Users/sergeygershov/Desktop/SynologyDrive/Infinity/azure_devops_pipeline/HelloWorldApp/obj/Debug/net8.0/HelloWorldApp.genruntimeconfig.cache
+/Users/sergeygershov/Desktop/SynologyDrive/Infinity/azure_devops_pipeline/HelloWorldApp/obj/Debug/net8.0/ref/HelloWorldApp.dll
