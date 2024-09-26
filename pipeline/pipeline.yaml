@@ -26,6 +26,22 @@ steps:
   workingDirectory: $(Build.SourcesDirectory)/HelloWorldApp
   displayName: 'Run Tests'
 
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'pack'
+    projects: '$(Build.SourcesDirectory)/HelloWorldApp/HelloWorldApp.csproj'
+    packDirectory: '$(Build.ArtifactStagingDirectory)'
+  displayName: 'Create NuGet Package'
+
+# New step to publish the package to Azure Artifacts
+- task: NuGetCommand@2
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+    publishVstsFeed: 'MyFeed'
+  displayName: 'Publish Package to Azure Artifacts'
+
+
 - task: PublishPipelineArtifact@1
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)'
