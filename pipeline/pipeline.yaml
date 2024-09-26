@@ -30,7 +30,7 @@ steps:
 
 # Push the package to Azure Artifacts
 - script: |
-    dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source "https://pkgs.dev.azure.com/sergeygershov/infinity/_packaging/MyFeed/nuget/v3/index.json" --api-key $(NUGET_API_KEY)
+    dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source "https://pkgs.dev.azure.com/sergeygershov/infinity/_packaging/MyFeed/sergeygershov/v3/index.json" --api-key $(NUGET_API_KEY)
   displayName: 'Push Package to Azure Artifacts'
 
 # Optionally, publish the package as a pipeline artifact for review or debugging
