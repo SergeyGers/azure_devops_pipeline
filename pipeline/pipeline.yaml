@@ -13,16 +13,16 @@ steps:
     version: '8.0.401'
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
+# Correct directory for restore and build
 - script: |
-    cd HelloWorldApp
-    dotnet restore --interactive  # Restore with interactive mode for credential prompt
+    cd $(Build.SourcesDirectory)/HelloWorldApp
+    dotnet restore --interactive
     dotnet build --configuration Release
-  workingDirectory: $(Build.SourcesDirectory)/HelloWorldApp
   displayName: 'Restore and Build Project'
 
 - script: |
+    cd $(Build.SourcesDirectory)/HelloWorldApp
     dotnet test
-  workingDirectory: $(Build.SourcesDirectory)/HelloWorldApp
   displayName: 'Run Tests'
 
 - task: DotNetCoreCLI@2
