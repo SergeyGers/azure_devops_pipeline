@@ -32,11 +32,19 @@ steps:
     command: 'pack'
     projects: '$(Build.SourcesDirectory)/HelloWorldApp/HelloWorldApp.csproj'
     packDirectory: '$(Build.ArtifactStagingDirectory)'
-    arguments: '--version-suffix $(Build.BuildId)'  # Use the build ID to create unique package versions
+    arguments: '--version-suffix $(Build.BuildId)'
   displayName: 'Create NuGet Package with Build Version'
 
-# Publish the package, skipping duplicates if the version already exists
+# Publish the package to Azure Artifacts, skipping duplicates if the version already exists
 - script: |
     dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source "https://pkgs.dev.azure.com/sergeygershov/infinity/_packaging/MyFeed/nuget/v3/index.json" --api-key az --interactive --skip-duplicate
   displayName: 'Publish Package to Azure Artifacts'
+
+# Publish the .nupkg files as pipeline artifacts so they are available for download
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)'
+    artifactName: 'HelloWorldAppPackage'
+    publishLocation: 'Pipeline'
+  displayName: 'Publish NuGet Package as Pipeline Artifact'
 
