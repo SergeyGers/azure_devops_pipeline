@@ -14,14 +14,13 @@ steps:
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
 - script: |
-    cd HelloWorldApp  # Navigate to the project directory
-    dotnet restore
+    cd HelloWorldApp
+    dotnet restore --interactive  # Restore with interactive mode for credential prompt
     dotnet build --configuration Release
   workingDirectory: $(Build.SourcesDirectory)/HelloWorldApp
-  displayName: 'Build Project'
+  displayName: 'Restore and Build Project'
 
 - script: |
-    cd HelloWorldApp  # Navigate to the project directory
     dotnet test
   workingDirectory: $(Build.SourcesDirectory)/HelloWorldApp
   displayName: 'Run Tests'
@@ -33,17 +32,8 @@ steps:
     packDirectory: '$(Build.ArtifactStagingDirectory)'
   displayName: 'Create NuGet Package'
 
-# New step to publish the package to Azure Artifacts
-- task: NuGetCommand@2
-  inputs:
-    command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-    publishVstsFeed: 'MyFeed'
+# Publish the package using dotnet nuget push
+- script: |
+    dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source "MyFeed" --api-key az
   displayName: 'Publish Package to Azure Artifacts'
 
-
-- task: PublishPipelineArtifact@1
-  inputs:
-    targetPath: '$(Build.ArtifactStagingDirectory)'
-    artifactName: 'HelloWorldApp'
-    publishLocation: 'Pipeline'
