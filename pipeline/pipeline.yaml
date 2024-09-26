@@ -14,11 +14,16 @@ steps:
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
 - script: |
+    cd HelloWorldApp  # Navigate to the project directory
     dotnet restore
     dotnet build --configuration Release
+  workingDirectory: $(Build.SourcesDirectory)/HelloWorldApp
   displayName: 'Build Project'
 
-- script: dotnet test
+- script: |
+    cd HelloWorldApp  # Navigate to the project directory
+    dotnet test
+  workingDirectory: $(Build.SourcesDirectory)/HelloWorldApp
   displayName: 'Run Tests'
 
 - task: PublishPipelineArtifact@1
@@ -26,4 +31,3 @@ steps:
     targetPath: '$(Build.ArtifactStagingDirectory)'
     artifactName: 'HelloWorldApp'
     publishLocation: 'Pipeline'
-
