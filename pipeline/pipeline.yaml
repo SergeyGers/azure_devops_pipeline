@@ -17,14 +17,12 @@ steps:
 - script: |
     cd $(Build.SourcesDirectory)/HelloWorldApp
     dotnet restore --interactive
-    dotnet build --configuration Release
+    dotnet build --configuration Release /p:Version=1.0.0-$(Build.BuildId)  # Pass Build.BuildId as the version here
   displayName: 'Restore and Build Project'
 
 # Print the version to the console
 - script: |
-    cd $(Build.SourcesDirectory)/HelloWorldApp
-    VERSION=$(dotnet msbuild /t:GetVersion /nologo)
-    echo "Build Version: $VERSION"
+    echo "Build Version: 1.0.0-$(Build.BuildId)"
   displayName: 'Print Version to Console'
 
 # Run tests
@@ -39,12 +37,12 @@ steps:
     command: 'pack'
     projects: '$(Build.SourcesDirectory)/HelloWorldApp/HelloWorldApp.csproj'
     packDirectory: '$(Build.ArtifactStagingDirectory)'
-    arguments: '--version-suffix $(Build.BuildId)'
+    arguments: '--configuration Release /p:Version=1.0.0-$(Build.BuildId)'  # Pass Build.BuildId as the version here
   displayName: 'Create NuGet Package with Build Version'
 
-# Push the package to Azure Artifacts securely using the PAT stored in a secret variable
+# Push the package to Azure Artifacts
 - script: |
-    dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source "https://pkgs.dev.azure.com/sergeygershov/infinity/_packaging/MyFeed/nuget/v3/index.json" --api-key $(NuGet_Push)
+    dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source "https://pkgs.dev.azure.com/sergeygershov/infinity/_packaging/MyFeed/nuget/v3/index.json" --api-key $(NUGET_API_KEY)
   displayName: 'Push Package to Azure Artifacts'
 
 # Publish the .nupkg files as pipeline artifacts so they are available for download
