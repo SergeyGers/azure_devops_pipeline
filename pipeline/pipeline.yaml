@@ -13,7 +13,6 @@ steps:
     version: '8.0.401'
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
-# Correct directory for restore and build
 - script: |
     cd $(Build.SourcesDirectory)/HelloWorldApp
     dotnet restore --interactive
@@ -32,7 +31,8 @@ steps:
     packDirectory: '$(Build.ArtifactStagingDirectory)'
   displayName: 'Create NuGet Package'
 
+# Run dotnet nuget push with the --interactive flag for authentication
 - script: |
-    dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source "https://pkgs.dev.azure.com/sergeygershov/infinity/_packaging/MyFeed/nuget/v3/index.json" --api-key az
+    dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source "https://pkgs.dev.azure.com/sergeygershov/infinity/_packaging/MyFeed/nuget/v3/index.json" --api-key az --interactive
   displayName: 'Publish Package to Azure Artifacts'
 
