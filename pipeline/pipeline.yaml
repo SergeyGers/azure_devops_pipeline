@@ -20,6 +20,13 @@ steps:
     dotnet build --configuration Release
   displayName: 'Restore and Build Project'
 
+# Print the version to the console
+- script: |
+    cd $(Build.SourcesDirectory)/HelloWorldApp
+    VERSION=$(dotnet msbuild /t:GetVersion /nologo)
+    echo "Build Version: $VERSION"
+  displayName: 'Print Version to Console'
+
 # Run tests
 - script: |
     cd $(Build.SourcesDirectory)/HelloWorldApp
@@ -35,10 +42,10 @@ steps:
     arguments: '--version-suffix $(Build.BuildId)'
   displayName: 'Create NuGet Package with Build Version'
 
-# Publish the package to Azure Artifacts, skipping duplicates if the version already exists
+# Push the package to Azure Artifacts securely using the PAT stored in a secret variable
 - script: |
-    dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source "https://pkgs.dev.azure.com/sergeygershov/infinity/_packaging/MyFeed/nuget/v3/index.json" --api-key az --interactive --skip-duplicate
-  displayName: 'Publish Package to Azure Artifacts'
+    dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source "https://pkgs.dev.azure.com/sergeygershov/infinity/_packaging/MyFeed/nuget/v3/index.json" --api-key $(NuGet_Push)
+  displayName: 'Push Package to Azure Artifacts'
 
 # Publish the .nupkg files as pipeline artifacts so they are available for download
 - task: PublishPipelineArtifact@1
