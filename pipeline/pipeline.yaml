@@ -2,7 +2,9 @@ trigger:
 - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: 'Default'
+  demands:
+    - agent.name -equals Sergeys-MacBook-Air
 
 steps:
 - task: UseDotNet@2
