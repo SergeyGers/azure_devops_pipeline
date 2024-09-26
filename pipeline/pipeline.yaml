@@ -20,17 +20,18 @@ steps:
     dotnet build --configuration Release
   displayName: 'Restore and Build Project'
 
-# Pack the project
+# Pack the project with a unique version
 - task: DotNetCoreCLI@2
   inputs:
     command: 'pack'
     projects: '$(Build.SourcesDirectory)/HelloWorldApp/HelloWorldApp.csproj'
     packDirectory: '$(Build.ArtifactStagingDirectory)'
-  displayName: 'Create NuGet Package'
+    arguments: '--configuration Release /p:Version=1.0.0-$(Build.BuildId)'  # Use unique version for each build
+  displayName: 'Create NuGet Package with Build Version'
 
-# Push the package to Azure Artifacts using the correct feed URL
+# Push the package to Azure Artifacts, skipping duplicates
 - script: |
-    dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source "https://pkgs.dev.azure.com/sergeygershov/_packaging/sergeygershov/nuget/v3/index.json" --api-key $(NUGET_API_KEY)
+    dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source "https://pkgs.dev.azure.com/sergeygershov/_packaging/sergeygershov/nuget/v3/index.json" --api-key $(NUGET_API_KEY) --skip-duplicate
   displayName: 'Push Package to Azure Artifacts'
 
 # Optionally, publish the package as a pipeline artifact for review or debugging
