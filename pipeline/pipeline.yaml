@@ -13,26 +13,30 @@ steps:
     version: '8.0.401'
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
+# Restore and build the project
 - script: |
     cd $(Build.SourcesDirectory)/HelloWorldApp
     dotnet restore --interactive
     dotnet build --configuration Release
   displayName: 'Restore and Build Project'
 
+# Run tests
 - script: |
     cd $(Build.SourcesDirectory)/HelloWorldApp
     dotnet test
   displayName: 'Run Tests'
 
+# Pack the project, appending the build ID to the version to ensure unique version numbers
 - task: DotNetCoreCLI@2
   inputs:
     command: 'pack'
     projects: '$(Build.SourcesDirectory)/HelloWorldApp/HelloWorldApp.csproj'
     packDirectory: '$(Build.ArtifactStagingDirectory)'
-  displayName: 'Create NuGet Package'
+    arguments: '--version-suffix $(Build.BuildId)'  # Use the build ID to create unique package versions
+  displayName: 'Create NuGet Package with Build Version'
 
-# Run dotnet nuget push with the --interactive flag for authentication
+# Publish the package, skipping duplicates if the version already exists
 - script: |
-    dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source "https://pkgs.dev.azure.com/sergeygershov/infinity/_packaging/MyFeed/nuget/v3/index.json" --api-key az --interactive
+    dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source "https://pkgs.dev.azure.com/sergeygershov/infinity/_packaging/MyFeed/nuget/v3/index.json" --api-key az --interactive --skip-duplicate
   displayName: 'Publish Package to Azure Artifacts'
 
