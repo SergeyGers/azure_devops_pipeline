@@ -25,7 +25,7 @@ steps:
   inputs:
     command: 'pack'
     projects: '$(Build.SourcesDirectory)/HelloWorldApp/HelloWorldApp.csproj'
-    packDirectory: '$(Build.ArtifactStagingDirectory)'
+    packDirectory: '$(Build.ArtifactStagingDirectory)'  # Pack the package to the artifact staging directory
     arguments: '--configuration Release /p:Version=1.0.0-$(Build.BuildId)'  # Use unique version for each build
   displayName: 'Create NuGet Package with Build Version'
 
@@ -34,11 +34,11 @@ steps:
     dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source "https://pkgs.dev.azure.com/sergeygershov/_packaging/sergeygershov/nuget/v3/index.json" --api-key $(NUGET_API_KEY) --skip-duplicate
   displayName: 'Push Package to Azure Artifacts'
 
-# Optionally, publish the package as a pipeline artifact for review or debugging
+# Publish the package as a pipeline artifact for review or debugging
 - task: PublishPipelineArtifact@1
   inputs:
-    targetPath: '$(Build.ArtifactStagingDirectory)'
-    artifactName: 'HelloWorldAppPackage'
-    publishLocation: 'Pipeline'
+    targetPath: '$(Build.ArtifactStagingDirectory)'  # This is where the .nupkg file is stored
+    artifactName: 'HelloWorldAppPackage'  # Name the pipeline artifact
+    publishLocation: 'Pipeline'  # Store the artifact in the pipeline for download
   displayName: 'Publish NuGet Package as Pipeline Artifact'
 
