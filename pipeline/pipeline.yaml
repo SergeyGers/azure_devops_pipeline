@@ -25,12 +25,12 @@ steps:
   inputs:
     command: 'pack'
     projects: '$(Build.SourcesDirectory)/HelloWorldApp/HelloWorldApp.csproj'
-    packDirectory: '$(Build.ArtifactStagingDirectory)'  # Output the .nupkg file here
+    packDirectory: '$(Build.ArtifactStagingDirectory)'
   displayName: 'Create NuGet Package'
 
-# Push the package to Azure Artifacts
+# Push the package to Azure Artifacts using the correct feed URL
 - script: |
-    dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source "https://pkgs.dev.azure.com/sergeygershov/infinity/_packaging/MyFeed/sergeygershov/v3/index.json" --api-key $(NUGET_API_KEY)
+    dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source "https://pkgs.dev.azure.com/sergeygershov/_packaging/sergeygershov/nuget/v3/index.json" --api-key $(NUGET_API_KEY)
   displayName: 'Push Package to Azure Artifacts'
 
 # Optionally, publish the package as a pipeline artifact for review or debugging
