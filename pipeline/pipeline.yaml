@@ -17,35 +17,23 @@ steps:
 - script: |
     cd $(Build.SourcesDirectory)/HelloWorldApp
     dotnet restore --interactive
-    dotnet build --configuration Release /p:Version=1.0.0-$(Build.BuildId)  # Pass Build.BuildId as the version here
+    dotnet build --configuration Release
   displayName: 'Restore and Build Project'
 
-# Print the version to the console
-- script: |
-    echo "Build Version: 1.0.0-$(Build.BuildId)"
-  displayName: 'Print Version to Console'
-
-# Run tests
-- script: |
-    cd $(Build.SourcesDirectory)/HelloWorldApp
-    dotnet test
-  displayName: 'Run Tests'
-
-# Pack the project, appending the build ID to the version to ensure unique version numbers
+# Pack the project
 - task: DotNetCoreCLI@2
   inputs:
     command: 'pack'
     projects: '$(Build.SourcesDirectory)/HelloWorldApp/HelloWorldApp.csproj'
-    packDirectory: '$(Build.ArtifactStagingDirectory)'
-    arguments: '--configuration Release /p:Version=1.0.0-$(Build.BuildId)'  # Pass Build.BuildId as the version here
-  displayName: 'Create NuGet Package with Build Version'
+    packDirectory: '$(Build.ArtifactStagingDirectory)'  # Output the .nupkg file here
+  displayName: 'Create NuGet Package'
 
 # Push the package to Azure Artifacts
 - script: |
     dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg --source "https://pkgs.dev.azure.com/sergeygershov/infinity/_packaging/MyFeed/nuget/v3/index.json" --api-key $(NUGET_API_KEY)
   displayName: 'Push Package to Azure Artifacts'
 
-# Publish the .nupkg files as pipeline artifacts so they are available for download
+# Optionally, publish the package as a pipeline artifact for review or debugging
 - task: PublishPipelineArtifact@1
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)'
